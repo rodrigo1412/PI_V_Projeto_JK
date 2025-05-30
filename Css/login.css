@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f9fafc;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 50px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner {
+    width: 320px;
+    height: 320px;
+    background: #629bff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner img {
+    width: 40px;
+    margin-bottom: 10px;
+}
+
+.banner p {
+    color: #3278e6;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.right {
+    flex: 1;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+.login {
+    width: 100%;
+    max-width: 390px;
+    background: #d0e1ff;
+    border-radius: 20px;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    width: 100%;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper img {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    background: #f8f9fb;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    cursor: pointer;
+}
+
+.forgot {
+    width: 100%;
+    text-align: right;
+    font-size: 12px;
+}
+
+.forgot a {
+    color: #0044ff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+button {
+    width: 100%;
+    background: #e2b007;
+    border: none;
+    border-radius: 15px;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #d1a006;
+}
+
+.register {
+    font-size: 12px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.register a {
+    color: #0044ff;
+    font-weight: bold;
+    text-decoration: none;
+}

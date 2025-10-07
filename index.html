@@ -1710,54 +1710,26 @@
         </div>
     </div>
 
+    <!-- Supabase (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Inicializa o cliente Supabase para uso no navegador
+        const SUPABASE_URL = 'https://lcqqvoqedrolxgjzbpbm.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjcXF2b3FlZHJvbHhnanpicGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk4NTI3NzMsImV4cCI6MjA3NTQyODc3M30.LuiR5w_ehjwT6Ovo7T0zO3WV57nYFThk-SnqIOkXodQ';
+        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Exemplo simples de verificação (opcional)
+        window.supabaseClient.from('alunos').select('*').limit(1).then(({ data, error }) => {
+            if (error) {
+                console.warn('Supabase não conectado ou tabela ausente:', error.message);
+            } else {
+                console.log('Supabase conectado. Exemplo de dados de alunos:', data);
+            }
+        });
+    </script>
+
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // ===== DADOS DE EXEMPLO PRÉ-CADASTRADOS =====
-        const users = {
-            // Alunos
-            'aluno@teste.com': {
-                password: '12345678',
-                type: 'aluno',
-                name: 'João Silva',
-                matricula: '2024001',
-                serie: '2',
-                turma: 'A'
-            },
-            'maria@teste.com': {
-                password: '12345678',
-                type: 'aluno',
-                name: 'Maria Santos',
-                matricula: '2024002',
-                serie: '1',
-                turma: 'B'
-            },
-
-            // Professores
-            'prof@teste.com': {
-                password: '12345678',
-                type: 'professor',
-                name: 'Prof. Carlos Silva',
-                matricula: 'PROF001',
-                disciplina: 'Matemática'
-            },
-            'ana.prof@teste.com': {
-                password: '12345678',
-                type: 'professor',
-                name: 'Profa. Ana Costa',
-                matricula: 'PROF002',
-                disciplina: 'Português'
-            },
-
-            // Responsáveis
-            'resp@teste.com': {
-                password: '12345678',
-                type: 'responsavel',
-                name: 'José Silva',
-                cpf: '123.456.789-00',
-                estudante: 'Maria Silva - 2309567'
-            }
-        };
-
         let currentUser = null;
 
         // ===== FUNÇÕES DE ACESSIBILIDADE (do segundo arquivo) =====
@@ -1793,57 +1765,128 @@
             document.getElementById(pageId).classList.add('active');
         }
 
-        function logout() {
+        async function logout() {
+            await window.supabaseClient.auth.signOut();
             currentUser = null;
             showPage('loginPage');
             showAlert('Logout realizado com sucesso!', 'success');
         }
 
         // ===== FUNÇÕES DE LOGIN =====
-        function doLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+        async function doLogin() {
+            const email = (document.getElementById('loginEmail').value || '').trim();
+            const password = (document.getElementById('loginPassword').value || '').trim();
 
             if (!email || !password) {
                 showAlert('Por favor, preencha todos os campos!', 'error');
                 return;
             }
 
-            const user = users[email];
-            if (!user || user.password !== password) {
-                showAlert('E-mail ou senha incorretos!', 'error');
+            const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+            if (error || !data?.user) {
+                console.error('Supabase login error:', error);
+                const msg = (error?.message || '').toLowerCase();
+                if (msg.includes('email') && msg.includes('confirm')) {
+                    showAlert('Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.', 'error');
+                } else if (msg.includes('invalid') || msg.includes('credenciais') || msg.includes('credentials')) {
+                    showAlert('E-mail ou senha incorretos!', 'error');
+                } else {
+                    showAlert(error?.message || 'Não foi possível efetuar login.', 'error');
+                }
                 return;
             }
 
+            // garante sessão disponível
+            await new Promise(r => setTimeout(r, 150));
+            const { data: userData } = await window.supabaseClient.auth.getUser();
+            const user = userData?.user || data.user;
             currentUser = user;
-            showAlert(`Bem-vindo, ${user.name}!`, 'success');
 
-            // Redirecionar para dashboard correto
-            setTimeout(() => {
-                if (user.type === 'aluno') {
-                    document.getElementById('alunoPerfilNome').textContent = user.name;
-                    document.getElementById('alunoPerfilInfo').textContent = `Aluno - ${user.serie}ª Série ${user.turma}`;
-                    showPage('dashboardAlunoPage');
-                } else if (user.type === 'professor') {
-                    document.getElementById('professorPerfilNome').textContent = user.name;
-                    document.getElementById('professorPerfilDisciplina').textContent = `Disciplina: ${user.disciplina}`;
-                    showPage('dashboardProfessorPage');
-                } else if (user.type === 'responsavel') {
-                    document.getElementById('responsavelPerfilNome').textContent = user.name;
-                    document.getElementById('responsavelPerfilInfo').textContent = `Responsável por: ${user.estudante}`;
-                    showPage('dashboardResponsavelPage');
-                }
-            }, 1500);
+            // Garante que o perfil exista
+            const perfil = await ensurePerfil(user);
+            if (!perfil) {
+                showAlert('Perfil não encontrado. Contate o suporte.', 'error');
+                return;
+            }
+
+            showAlert(`Bem-vindo, ${perfil.nome}!`, 'success');
+            setTimeout(() => routeByPerfil(perfil), 1000);
+        }
+
+        function routeByPerfil(perfil) {
+            if (perfil.tipo === 'aluno') {
+                document.getElementById('alunoPerfilNome').textContent = perfil.nome;
+                document.getElementById('alunoPerfilInfo').textContent = 'Aluno';
+                showPage('dashboardAlunoPage');
+                return;
+            }
+            if (perfil.tipo === 'professor') {
+                document.getElementById('professorPerfilNome').textContent = perfil.nome;
+                document.getElementById('professorPerfilDisciplina').textContent = 'Disciplina: (defina no perfil)';
+                showPage('dashboardProfessorPage');
+                return;
+            }
+            if (perfil.tipo === 'responsavel') {
+                document.getElementById('responsavelPerfilNome').textContent = perfil.nome;
+                document.getElementById('responsavelPerfilInfo').textContent = 'Responsável';
+                showPage('dashboardResponsavelPage');
+                return;
+            }
+            showPage('loginPage');
+        }
+
+        async function ensurePerfil(user) {
+            // tenta obter
+            let { data: perfil, error } = await window.supabaseClient
+                .from('perfis')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+            if (perfil) return perfil;
+            if (error) console.warn('perfis select error:', error.message);
+
+            // cria a partir de metadados do usuário
+            const meta = user.user_metadata || {};
+            const novoPerfil = {
+                id: user.id,
+                email: user.email,
+                nome: meta.nome || (user.email ? user.email.split('@')[0] : 'Usuário'),
+                tipo: meta.tipo || 'aluno',
+                escola_id: meta.escola_id || null
+            };
+
+            const { error: upsertErr } = await window.supabaseClient
+                .from('perfis')
+                .upsert(novoPerfil, { onConflict: 'id' });
+            if (upsertErr) {
+                console.warn('Falha ao criar perfil (seguindo com fallback local):', upsertErr.message);
+            }
+
+            // reconsulta
+            const { data: perfil2, error: err2 } = await window.supabaseClient
+                .from('perfis')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+            if (err2) console.warn('perfis reselect error:', err2.message);
+            // fallback: usa metadados para seguir fluxo mesmo sem SELECT (ex.: RLS)
+            return perfil2 || {
+                id: user.id,
+                email: user.email,
+                nome: novoPerfil.nome,
+                tipo: novoPerfil.tipo,
+                escola_id: novoPerfil.escola_id
+            };
         }
 
         // ===== FUNÇÕES DE CADASTRO =====
-        function cadastrarAluno() {
-            const matricula = document.getElementById('alunoMatricula').value;
-            const nome = document.getElementById('alunoNome').value;
-            const serie = document.getElementById('alunoSerie').value;
-            const turma = document.getElementById('alunoTurma').value;
-            const email = document.getElementById('alunoEmail').value;
-            const senha = document.getElementById('alunoSenha').value;
+        async function cadastrarAluno() {
+            const matricula = (document.getElementById('alunoMatricula').value || '').trim();
+            const nome = (document.getElementById('alunoNome').value || '').trim();
+            const serie = (document.getElementById('alunoSerie').value || '').trim();
+            const turma = (document.getElementById('alunoTurma').value || '').trim();
+            const email = (document.getElementById('alunoEmail').value || '').trim();
+            const senha = (document.getElementById('alunoSenha').value || '').trim();
 
             if (!matricula || !nome || !serie || !turma || !email || !senha) {
                 showAlert('Por favor, preencha todos os campos!', 'error');
@@ -1855,31 +1898,37 @@
                 return;
             }
 
-            if (users[email]) {
-                showAlert('Este e-mail já está cadastrado!', 'error');
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email,
+                password: senha,
+                options: {
+                    data: { tipo: 'aluno', nome }
+                }
+            });
+
+            if (error) {
+                showAlert(error.message, 'error');
                 return;
             }
 
-            // Cadastrar novo usuário
-            users[email] = {
-                password: senha,
-                type: 'aluno',
-                name: nome,
-                matricula: matricula,
-                serie: serie,
-                turma: turma
-            };
+            const userId = data.user?.id;
+            if (userId) {
+                // upsert perfil
+                await window.supabaseClient.from('perfis').upsert({ id: userId, email, nome, tipo: 'aluno' });
+                // Completa dados específicos do aluno
+                await window.supabaseClient.from('alunos').update({ matricula, serie, turma }).eq('id', userId);
+            }
 
-            showAlert('Cadastro realizado com sucesso!', 'success');
+            showAlert('Cadastro realizado! Verifique seu e-mail para confirmar (se necessário).', 'success');
             setTimeout(() => showPage('loginPage'), 2000);
         }
 
-        function cadastrarProfessor() {
-            const matricula = document.getElementById('professorMatricula').value;
-            const nome = document.getElementById('professorNome').value;
-            const email = document.getElementById('professorEmail').value;
-            const disciplina = document.getElementById('professorDisciplina').value;
-            const senha = document.getElementById('professorSenha').value;
+        async function cadastrarProfessor() {
+            const matricula = (document.getElementById('professorMatricula').value || '').trim();
+            const nome = (document.getElementById('professorNome').value || '').trim();
+            const email = (document.getElementById('professorEmail').value || '').trim();
+            const disciplina = (document.getElementById('professorDisciplina').value || '').trim();
+            const senha = (document.getElementById('professorSenha').value || '').trim();
 
             if (!matricula || !nome || !email || !disciplina || !senha) {
                 showAlert('Por favor, preencha todos os campos!', 'error');
@@ -1891,29 +1940,35 @@
                 return;
             }
 
-            if (users[email]) {
-                showAlert('Este e-mail já está cadastrado!', 'error');
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email,
+                password: senha,
+                options: {
+                    data: { tipo: 'professor', nome }
+                }
+            });
+
+            if (error) {
+                showAlert(error.message, 'error');
                 return;
             }
 
-            users[email] = {
-                password: senha,
-                type: 'professor',
-                name: nome,
-                matricula: matricula,
-                disciplina: disciplina
-            };
+            const userId = data.user?.id;
+            if (userId) {
+                await window.supabaseClient.from('perfis').upsert({ id: userId, email, nome, tipo: 'professor' });
+                await window.supabaseClient.from('professores').update({ matricula, disciplina_principal: disciplina }).eq('id', userId);
+            }
 
-            showAlert('Cadastro realizado com sucesso!', 'success');
+            showAlert('Cadastro realizado! Verifique seu e-mail para confirmar (se necessário).', 'success');
             setTimeout(() => showPage('loginPage'), 2000);
         }
 
-        function cadastrarResponsavel() {
-            const cpf = document.getElementById('responsavelCpf').value;
-            const nome = document.getElementById('responsavelNome').value;
-            const email = document.getElementById('responsavelEmail').value;
-            const matriculaEstudante = document.getElementById('responsavelMatriculaEstudante').value;
-            const senha = document.getElementById('responsavelSenha').value;
+        async function cadastrarResponsavel() {
+            const cpf = (document.getElementById('responsavelCpf').value || '').trim();
+            const nome = (document.getElementById('responsavelNome').value || '').trim();
+            const email = (document.getElementById('responsavelEmail').value || '').trim();
+            const matriculaEstudante = (document.getElementById('responsavelMatriculaEstudante').value || '').trim();
+            const senha = (document.getElementById('responsavelSenha').value || '').trim();
 
             if (!cpf || !nome || !email || !matriculaEstudante || !senha) {
                 showAlert('Por favor, preencha todos os campos!', 'error');
@@ -1925,25 +1980,31 @@
                 return;
             }
 
-            if (users[email]) {
-                showAlert('Este e-mail já está cadastrado!', 'error');
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email,
+                password: senha,
+                options: {
+                    data: { tipo: 'responsavel', nome }
+                }
+            });
+
+            if (error) {
+                showAlert(error.message, 'error');
                 return;
             }
 
-            users[email] = {
-                password: senha,
-                type: 'responsavel',
-                name: nome,
-                cpf: cpf,
-                estudante: `Estudante - ${matriculaEstudante}`
-            };
+            const userId = data.user?.id;
+            if (userId) {
+                await window.supabaseClient.from('perfis').upsert({ id: userId, email, nome, tipo: 'responsavel' });
+                await window.supabaseClient.from('responsaveis').update({ cpf: cpf.replace(/\D/g, ''), estudante_matricula: matriculaEstudante }).eq('id', userId);
+            }
 
-            showAlert('Cadastro realizado com sucesso!', 'success');
+            showAlert('Cadastro realizado! Verifique seu e-mail para confirmar (se necessário).', 'success');
             setTimeout(() => showPage('loginPage'), 2000);
         }
 
         // ===== RECUPERAÇÃO DE SENHA =====
-        function recoverPassword() {
+        async function recoverPassword() {
             const email = document.getElementById('recoveryEmail').value;
             const messageDiv = document.getElementById('recoveryMessage');
 
@@ -1957,8 +2018,11 @@
                 return;
             }
 
-            if (!users[email]) {
-                showMessage(messageDiv, 'E-mail não encontrado no sistema.', 'error');
+            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin
+            });
+            if (error) {
+                showMessage(messageDiv, error.message, 'error');
                 return;
             }
 
@@ -2135,6 +2199,14 @@
 
         // ===== MÁSCARAS E VALIDAÇÕES =====
         document.addEventListener('DOMContentLoaded', function () {
+            // Auto-rota se já houver sessão válida
+            window.supabaseClient.auth.getSession().then(async ({ data }) => {
+                const user = data?.session?.user;
+                if (user) {
+                    const perfil = await ensurePerfil(user);
+                    if (perfil) routeByPerfil(perfil);
+                }
+            });
             // Máscara CPF
             const cpfInput = document.getElementById('responsavelCpf');
             if (cpfInput) {

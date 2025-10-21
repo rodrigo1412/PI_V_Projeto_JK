@@ -1,149 +1,155 @@
-# Sistema Escolar Completo - ProJK
+Sistema Escolar Completo - ProJK
 
-Este projeto foi separado do arquivo original `index_final_projK_access_ok (1).html` (8.000 linhas) em páginas individuais para melhor organização e manutenção.
+Esse é o ProJK, um sistema escolar completo desenvolvido para tornar a gestão escolar mais simples e organizada.
+O projeto foi separado de um arquivo único com mais de 8 mil linhas (index_final_projK_access_ok (1).html) em várias páginas menores, para facilitar a manutenção e o desenvolvimento.
 
-## 📁 Estrutura do Projeto
+Estrutura do Projeto
+Arquivos principais
 
-### Arquivos Principais
-- **`index.html`** - Página principal com todas as seções (versão original em uma página)
-- **`login.html`** - Página de login isolada
-- **`recuperar-senha.html`** - Página de recuperação de senha
-- **`cadastro-aluno.html`** - Página de cadastro de alunos
-- **`cadastro-professor.html`** - Página de cadastro de professores
-- **`cadastro-responsavel.html`** - Página de cadastro de responsáveis
-- **`dashboard-aluno.html`** - Dashboard do aluno
+index.html – Página principal (versão original com tudo em uma só)
 
-### Arquivos de Recursos
-- **`styles.css`** - Estilos compartilhados entre todas as páginas
-- **`script.js`** - JavaScript compartilhado com todas as funcionalidades
+login.html – Página de login
 
-## 🚀 Como Usar
+recuperar-senha.html – Página de recuperação de senha
 
-### Opção 1: Página Única (Original)
-Abra `index.html` no navegador - contém todas as funcionalidades em uma única página.
+cadastro-aluno.html – Cadastro de alunos
 
-### Opção 2: Páginas Separadas
-Navegue diretamente para as páginas específicas:
-- `login.html` - Para fazer login
-- `cadastro-aluno.html` - Para cadastrar alunos
-- `cadastro-professor.html` - Para cadastrar professores
-- `cadastro-responsavel.html` - Para cadastrar responsáveis
-- `dashboard-aluno.html` - Dashboard do aluno
+cadastro-professor.html – Cadastro de professores
 
-## 🔐 Credenciais de Teste
+cadastro-responsavel.html – Cadastro de responsáveis
 
-**Senha para todos:** `12345678`
+dashboard-aluno.html – Painel do aluno
 
-- **Aluno:** `aluno@teste.com`
-- **Professor:** `prof@teste.com`
-- **Responsável:** `resp@teste.com`
+Arquivos de recursos
 
-## ✨ Funcionalidades
+styles.css – Estilos gerais usados em todas as páginas
 
-### Acessibilidade
-- Modo daltônico
-- Modo preto e branco
-- Legendas explicativas
-- Alto contraste
-- Fonte para dislexia
-- Redução de animações
+script.js – Funções e interações do sistema
 
-### Usuários
-- **Alunos:** Visualizam boletim e perfil
-- **Professores:** Gerenciam turmas e disciplinas
-- **Responsáveis:** Acompanham progresso dos estudantes
+Como usar
+Modo 1 – Página única (versão original)
 
-### Recursos
-- Sistema de login/logout
-- Cadastro de usuários
-- Recuperação de senha
-- Dashboard personalizado por tipo de usuário
-- Validação de formulários
-- Máscaras de entrada (CPF)
-- Alertas personalizados
+Abra o arquivo index.html no navegador.
+Todas as funcionalidades estarão disponíveis em uma única página.
 
-## 🛠️ Tecnologias Utilizadas
+Modo 2 – Páginas separadas
 
-- **HTML5** - Estrutura semântica
-- **CSS3** - Estilos modernos com flexbox e grid
-- **JavaScript ES6+** - Funcionalidades interativas
-- **Responsive Design** - Adaptável a diferentes telas
+Se preferir, é possível navegar entre as páginas específicas:
 
-## 📱 Responsividade
+login.html → fazer login
 
-O sistema é totalmente responsivo e funciona em:
-- Desktop
-- Tablet
-- Smartphone
+cadastro-aluno.html → cadastrar alunos
 
-## 🎨 Design
+cadastro-professor.html → cadastrar professores
 
-- Interface moderna e limpa
-- Cores acessíveis
-- Ícones intuitivos
-- Animações suaves
-- Elementos decorativos
+cadastro-responsavel.html → cadastrar responsáveis
 
-## 🔧 Manutenção
+dashboard-aluno.html → painel do aluno
 
-### Adicionando Novas Páginas
-1. Crie o arquivo HTML
-2. Inclua `styles.css` e `script.js`
-3. Use a função `navigateToPage()` para navegação
+Credenciais de teste
 
-### Modificando Estilos
-- Edite `styles.css` para alterações globais
-- Use classes específicas para estilos locais
+Senha para todos os usuários: 12345678
 
-### Adicionando Funcionalidades
-- Edite `script.js` para funcionalidades compartilhadas
-- Use scripts locais para funcionalidades específicas
+Aluno: aluno@teste.com
 
-## 📋 Estrutura das Páginas
+Professor: prof@teste.com
 
-Cada página separada segue o padrão:
-```html
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nome da Página</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Menu de Acessibilidade -->
-    <!-- Conteúdo da Página -->
-    <script src="script.js"></script>
-    <script>
-        // Scripts específicos da página
-    </script>
-</body>
-</html>
-```
+Responsável: resp@teste.com
 
-## 🎯 Vantagens da Separação
+Funcionalidades principais
+Acessibilidade
 
-1. **Manutenção mais fácil** - Cada página é independente
-2. **Carregamento mais rápido** - Apenas o necessário é carregado
-3. **Desenvolvimento em equipe** - Diferentes pessoas podem trabalhar em páginas diferentes
-4. **SEO melhor** - URLs específicas para cada funcionalidade
-5. **Debugging simplificado** - Problemas isolados por página
+O sistema foi desenvolvido com foco na inclusão:
 
-## 🚨 Notas Importantes
+Modo daltônico
 
-- Todas as páginas compartilham os mesmos estilos e scripts
-- O sistema de usuários é mantido em memória (localStorage)
-- As validações são consistentes entre todas as páginas
-- A acessibilidade é preservada em todas as páginas
+Modo preto e branco
 
-## 📞 Suporte
+Alto contraste
 
-Para dúvidas ou problemas, verifique:
-1. Se todos os arquivos estão na mesma pasta
-2. Se o navegador suporta JavaScript
-3. Se não há erros no console do navegador
+Fonte adaptada para dislexia
 
----
+Legendas explicativas
 
-**Desenvolvido com ❤️ para a educação**
+Redução de animações
+
+Usuários
+
+Cada tipo de usuário tem acesso a funcionalidades específicas:
+
+Aluno: consulta boletim e perfil
+
+Professor: gerencia turmas e disciplinas
+
+Responsável: acompanha o desempenho dos alunos
+
+Recursos gerais
+
+Login e logout
+
+Recuperação de senha
+
+Cadastro de usuários
+
+Dashboards personalizados
+
+Validação de formulários
+
+Máscara de CPF
+
+Alertas personalizados
+
+Tecnologias utilizadas
+
+HTML5 – Estrutura das páginas
+
+CSS3 – Layout moderno com flexbox e grid
+
+JavaScript (ES6+) – Interatividade e lógica
+
+Design responsivo – Funciona bem em diferentes tamanhos de tela
+
+Responsividade
+
+O sistema se adapta automaticamente a:
+
+Computadores
+
+Tablets
+
+Smartphones
+
+Design
+
+O visual foi pensado para ser leve e agradável:
+
+Interface moderna e limpa
+
+Cores acessíveis
+
+Ícones intuitivos
+
+Animações suaves
+
+Elementos decorativos discretos
+
+Manutenção
+Adicionar novas páginas
+
+Crie o arquivo HTML da nova página.
+
+Inclua styles.css e script.js.
+
+Use a função navigateToPage() para fazer a navegação.
+
+Alterar estilos
+
+Edite o arquivo styles.css para mudanças gerais.
+
+Use classes específicas para personalizações locais.
+
+Adicionar funcionalidades
+
+Edite o script.js para funções globais.
+
+Crie scripts separados para funções específicas.

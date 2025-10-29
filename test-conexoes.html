@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Conexões - Sistema Escolar</title>
+    <link rel="stylesheet" href="shared/common.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        .test-section h3 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #D4AF37, #C19A2B);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste de Conexões - Sistema Escolar</h1>
+        <p>Este arquivo testa se todas as conexões entre os arquivos separados estão funcionando corretamente.</p>
+
+        <div class="test-section">
+            <h3>📚 Teste de Funções Comuns</h3>
+            <button class="test-button" onclick="testShowAlert()">Testar showAlert</button>
+            <button class="test-button" onclick="testNavigateToPage()">Testar navigateToPage</button>
+            <button class="test-button" onclick="testValidateEmail()">Testar validateEmail</button>
+            <button class="test-button" onclick="testMascararCPF()">Testar mascararCPF</button>
+            <div id="common-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>♿ Teste de Acessibilidade</h3>
+            <button class="test-button" onclick="testToggleAccessibility()">Testar toggleAccessibility</button>
+            <button class="test-button" onclick="testToggleLegend()">Testar toggleLegend</button>
+            <button class="test-button" onclick="testTogglePbLegend()">Testar togglePbLegend</button>
+            <div id="accessibility-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>👤 Teste de Dados de Usuários</h3>
+            <button class="test-button" onclick="testUsersData()">Testar dados de usuários</button>
+            <button class="test-button" onclick="testGarantirCurrentUser()">Testar garantirCurrentUser</button>
+            <div id="users-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Teste de Funções Utilitárias</h3>
+            <button class="test-button" onclick="testShowLoading()">Testar showLoading</button>
+            <button class="test-button" onclick="testToggleTheme()">Testar toggleTheme</button>
+            <button class="test-button" onclick="testValidateForm()">Testar validateForm</button>
+            <div id="utils-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Resumo dos Testes</h3>
+            <button class="test-button" onclick="runAllTests()">Executar Todos os Testes</button>
+            <div id="summary-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="shared/common.js"></script>
+    <script>
+        // Funções de teste
+        function testShowAlert() {
+            try {
+                if (typeof showAlert === 'function') {
+                    showAlert('Teste de alerta funcionando!', 'success');
+                    showResult('common-result', '✅ showAlert funcionando corretamente', 'success');
+                } else {
+                    showResult('common-result', '❌ showAlert não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('common-result', '❌ Erro ao testar showAlert: ' + error.message, 'error');
+            }
+        }
+
+        function testNavigateToPage() {
+            try {
+                if (typeof navigateToPage === 'function') {
+                    showResult('common-result', '✅ navigateToPage funcionando corretamente', 'success');
+                } else {
+                    showResult('common-result', '❌ navigateToPage não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('common-result', '❌ Erro ao testar navigateToPage: ' + error.message, 'error');
+            }
+        }
+
+        function testValidateEmail() {
+            try {
+                if (typeof validateEmail === 'function') {
+                    const testEmail = 'teste@exemplo.com';
+                    const result = validateEmail(testEmail);
+                    if (result) {
+                        showResult('common-result', '✅ validateEmail funcionando corretamente', 'success');
+                    } else {
+                        showResult('common-result', '❌ validateEmail retornou resultado incorreto', 'error');
+                    }
+                } else {
+                    showResult('common-result', '❌ validateEmail não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('common-result', '❌ Erro ao testar validateEmail: ' + error.message, 'error');
+            }
+        }
+
+        function testMascararCPF() {
+            try {
+                if (typeof mascararCPF === 'function') {
+                    const testCPF = '12345678901';
+                    const result = mascararCPF(testCPF);
+                    if (result && result.includes('.')) {
+                        showResult('common-result', '✅ mascararCPF funcionando corretamente', 'success');
+                    } else {
+                        showResult('common-result', '❌ mascararCPF retornou resultado incorreto', 'error');
+                    }
+                } else {
+                    showResult('common-result', '❌ mascararCPF não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('common-result', '❌ Erro ao testar mascararCPF: ' + error.message, 'error');
+            }
+        }
+
+        function testToggleAccessibility() {
+            try {
+                if (typeof toggleAccessibility === 'function') {
+                    showResult('accessibility-result', '✅ toggleAccessibility funcionando corretamente', 'success');
+                } else {
+                    showResult('accessibility-result', '❌ toggleAccessibility não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('accessibility-result', '❌ Erro ao testar toggleAccessibility: ' + error.message, 'error');
+            }
+        }
+
+        function testToggleLegend() {
+            try {
+                if (typeof toggleLegend === 'function') {
+                    showResult('accessibility-result', '✅ toggleLegend funcionando corretamente', 'success');
+                } else {
+                    showResult('accessibility-result', '❌ toggleLegend não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('accessibility-result', '❌ Erro ao testar toggleLegend: ' + error.message, 'error');
+            }
+        }
+
+        function testTogglePbLegend() {
+            try {
+                if (typeof togglePbLegend === 'function') {
+                    showResult('accessibility-result', '✅ togglePbLegend funcionando corretamente', 'success');
+                } else {
+                    showResult('accessibility-result', '❌ togglePbLegend não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('accessibility-result', '❌ Erro ao testar togglePbLegend: ' + error.message, 'error');
+            }
+        }
+
+        function testUsersData() {
+            try {
+                if (typeof users !== 'undefined' && users !== null) {
+                    const userCount = Object.keys(users).length;
+                    showResult('users-result', `✅ Dados de usuários carregados (${userCount} usuários)`, 'success');
+                } else {
+                    showResult('users-result', '❌ Dados de usuários não encontrados', 'error');
+                }
+            } catch (error) {
+                showResult('users-result', '❌ Erro ao testar dados de usuários: ' + error.message, 'error');
+            }
+        }
+
+        function testGarantirCurrentUser() {
+            try {
+                if (typeof garantirCurrentUser === 'function') {
+                    showResult('users-result', '✅ garantirCurrentUser funcionando corretamente', 'success');
+                } else {
+                    showResult('users-result', '❌ garantirCurrentUser não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('users-result', '❌ Erro ao testar garantirCurrentUser: ' + error.message, 'error');
+            }
+        }
+
+        function testShowLoading() {
+            try {
+                if (typeof showLoading === 'function') {
+                    showResult('utils-result', '✅ showLoading funcionando corretamente', 'success');
+                } else {
+                    showResult('utils-result', '❌ showLoading não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('utils-result', '❌ Erro ao testar showLoading: ' + error.message, 'error');
+            }
+        }
+
+        function testToggleTheme() {
+            try {
+                if (typeof toggleTheme === 'function') {
+                    showResult('utils-result', '✅ toggleTheme funcionando corretamente', 'success');
+                } else {
+                    showResult('utils-result', '❌ toggleTheme não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('utils-result', '❌ Erro ao testar toggleTheme: ' + error.message, 'error');
+            }
+        }
+
+        function testValidateForm() {
+            try {
+                if (typeof validateForm === 'function') {
+                    showResult('utils-result', '✅ validateForm funcionando corretamente', 'success');
+                } else {
+                    showResult('utils-result', '❌ validateForm não encontrada', 'error');
+                }
+            } catch (error) {
+                showResult('utils-result', '❌ Erro ao testar validateForm: ' + error.message, 'error');
+            }
+        }
+
+        function runAllTests() {
+            const tests = [
+                testShowAlert, testNavigateToPage, testValidateEmail, testMascararCPF,
+                testToggleAccessibility, testToggleLegend, testTogglePbLegend,
+                testUsersData, testGarantirCurrentUser, testShowLoading, testToggleTheme, testValidateForm
+            ];
+
+            let passed = 0;
+            let total = tests.length;
+
+            tests.forEach(test => {
+                try {
+                    test();
+                    passed++;
+                } catch (error) {
+                    console.error('Erro no teste:', error);
+                }
+            });
+
+            const percentage = Math.round((passed / total) * 100);
+            const message = `📊 Testes concluídos: ${passed}/${total} (${percentage}%)`;
+            
+            if (percentage >= 90) {
+                showResult('summary-result', message + ' - ✅ Excelente!', 'success');
+            } else if (percentage >= 70) {
+                showResult('summary-result', message + ' - ⚠️ Bom, mas pode melhorar', 'success');
+            } else {
+                showResult('summary-result', message + ' - ❌ Precisa de correções', 'error');
+            }
+        }
+
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+
+        // Executar teste inicial ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            showAlert('Página de teste carregada com sucesso! Sistema agora usa index.html como página principal.', 'success');
+        });
+    </script>
+</body>
+</html>

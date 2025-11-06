@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Responsável - Sistema Escolar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Menu de Acessibilidade -->
+    <div class="accessibility-menu">
+        <button class="accessibility-toggle">
+            ♿ Acessibilidade
+        </button>
+        <div class="accessibility-options" id="accessibilityOptions">
+            <a href="#" onclick="toggleAccessibility('daltonismo')">Modo Daltônico</a>
+            <a href="#" onclick="toggleAccessibility('preto-e-branco')">Preto e Branco</a>
+            <a href="#" onclick="toggleAccessibility('nenhum')">Restaurar Padrão</a>
+        </div>
+    </div>
+
+    <!-- Legendas de Acessibilidade -->
+    <button class="legend-toggle" onclick="toggleLegend()">Ver Legenda (Daltonismo)</button>
+    <div class="daltonismo-legend" id="daltonismoLegend">
+        <button class="legend-close-btn" onclick="toggleLegend()" aria-label="Fechar legenda">×</button>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #0066cc;">★</div>
+            <span class="legend-text">Excelente</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666666;">●</div>
+            <span class="legend-text">Bom</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #cc6600;">▲</div>
+            <span class="legend-text">Regular / Atenção</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #000000;">✖</div>
+            <span class="legend-text">Insatisfatório</span>
+        </div>
+    </div>
+
+    <button class="pb-legend-toggle" onclick="togglePbLegend()">Ver Legenda (P&B)</button>
+    <div class="pb-legend" id="pbLegend">
+        <button class="legend-close-btn" onclick="togglePbLegend()" aria-label="Fechar legenda">×</button>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">■</div>
+            <span class="legend-text">Excelente</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">●</div>
+            <span class="legend-text">Bom</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">▲</div>
+            <span class="legend-text">Regular / Atenção</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">✖</div>
+            <span class="legend-text">Insatisfatório</span>
+        </div>
+    </div>
+
+    <!-- Elementos Decorativos -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- DASHBOARD RESPONSÁVEL -->
+        <div class="page active" id="dashboardResponsavelPage">
+            <div class="main-layout">
+                <nav class="sidebar">
+                    <div class="menu-item active" onclick="showResponsavelSection('boletim')">
+                        <div class="menu-icon">📋</div>
+                        <span>Boletim</span>
+                    </div>
+
+                    <div class="menu-item" onclick="showResponsavelSection('frequencia')">
+                        <div class="menu-icon">📅</div>
+                        <span>Frequência</span>
+                    </div>
+
+                    <div class="menu-item" onclick="showResponsavelSection('perfil')">
+                        <div class="menu-icon">👤</div>
+                        <span>Perfil</span>
+                    </div>
+
+                    <div class="menu-item" onclick="logout()">
+                        <div class="menu-icon">🚪</div>
+                        <span>Sair</span>
+                    </div>
+                </nav>
+
+                <main class="main-content">
+                    <!-- SEÇÃO BOLETIM DO FILHO -->
+                    <div id="responsavelBoletimSection">
+                        <div class="boletim-container">
+                            <div class="bd-header">
+                                <div class="bd-perfil">
+                                    <img src="https://via.placeholder.com/64x80" alt="Foto do aluno" class="bd-avatar-oval" width="64" height="80">
+                                    <div class="bd-perfil-info">
+                                        <strong class="bd-perfil-nome" id="responsavelFilhoNome">Maria Silva</strong>
+                                        <div class="bd-perfil-meta" id="responsavelFilhoInfo">Matrícula: 2309567 • Turma: 2ºA</div>
+                                    </div>
+                        </div>
+                                <div class="bd-projk">ProJK</div>
+                        </div>
+
+                            <div class="bd-toolbar" role="region" aria-label="Opções de acessibilidade">
+                                <button type="button" class="bd-btn" data-action="font-dec" aria-label="Diminuir texto">A−</button>
+                                <button type="button" class="bd-btn" data-action="font-inc" aria-label="Aumentar texto">A+</button>
+                                <button type="button" class="bd-btn" data-action="contrast" aria-label="Alto contraste">◐</button>
+                                <button type="button" class="bd-btn" data-action="dyslexia" aria-label="Fonte para dislexia">𝑓</button>
+                                <button type="button" class="bd-btn" data-action="reduce-motion" aria-label="Reduzir animações">◎</button>
+                                <button type="button" class="bd-btn" data-action="print" aria-label="Exportar PDF">🖨</button>
+                            </div>
+
+                        <h3 class="boletim-title">📋 Boletim do Filho</h3>
+                        
+                        <!-- Seletor Visual de Simulado (destaca coluna) -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #2c3e50; font-size: 14px;">
+                                🎯 Destacar simulado:
+                            </label>
+                            <div style="display: inline-flex; gap: 8px; padding: 8px; background: linear-gradient(135deg, #f8f9fa, #ffffff); border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                                <button class="simulado-btn active" onclick="destacarSimuladoResponsavel(1)" data-simulado="1">
+                                    📝 1
+                                </button>
+                                <button class="simulado-btn" onclick="destacarSimuladoResponsavel(2)" data-simulado="2">
+                                    📝 2
+                                </button>
+                                <button class="simulado-btn" onclick="destacarSimuladoResponsavel(3)" data-simulado="3">
+                                    📝 3
+                                </button>
+                                <button class="simulado-btn" onclick="destacarSimuladoResponsavel(4)" data-simulado="4">
+                                    📝 4
+                                </button>
+                                <button class="simulado-btn" onclick="destacarSimuladoResponsavel(0)" data-simulado="0">
+                                    👁️ Todos
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="tab-headers">
+                            <div class="tab-header"><strong>📚 Disciplina</strong></div>
+                            <div class="tab-header active" data-col="1">📝 Simulado 1</div>
+                            <div class="tab-header" data-col="2">📝 Simulado 2</div>
+                            <div class="tab-header" data-col="3">📝 Simulado 3</div>
+                            <div class="tab-header" data-col="4">📝 Simulado 4</div>
+                        </div>
+
+                            <table class="grades-table">
+                                <tr>
+                                    <td class="subject-cell">Português</td>
+                                    <td class="grade-cell grade-bom destaque-col-1">Bom</td>
+                                    <td class="grade-cell grade-excelente">Excelente</td>
+                                    <td class="grade-cell grade-bom">Bom</td>
+                                    <td class="grade-cell grade-excelente">Excelente</td>
+                                </tr>
+                                <tr>
+                                    <td class="subject-cell">Matemática</td>
+                                    <td class="grade-cell grade-excelente destaque-col-1">Excelente</td>
+                                    <td class="grade-cell grade-excelente">Excelente</td>
+                                    <td class="grade-cell grade-bom">Bom</td>
+                                    <td class="grade-cell grade-excelente">Excelente</td>
+                                </tr>
+                                <tr>
+                                    <td class="subject-cell">Ciências</td>
+                                    <td class="grade-cell grade-bom destaque-col-1">Bom</td>
+                                    <td class="grade-cell grade-bom">Bom</td>
+                                    <td class="grade-cell grade-excelente">Excelente</td>
+                                    <td class="grade-cell grade-bom">Bom</td>
+                                </tr>
+                            </table>
+
+                            <!-- Seção de Observações do Professor -->
+                            <div class="observacoes-section">
+                                <h3 class="observacoes-title">📝 Observações dos Professores</h3>
+                                
+                                <div class="observacao-card">
+                                    <div class="observacao-header">
+                                        <span class="observacao-disciplina">📚 Matemática</span>
+                                        <span class="observacao-data">15/10/2024</span>
+                                    </div>
+                                    <div class="observacao-professor">Prof. Carlos Silva</div>
+                                    <div class="observacao-texto">
+                                        Aluna demonstra excelente desempenho em todas as atividades. Participa ativamente das aulas e auxilia os colegas. Recomendo continuar incentivando a prática diária de exercícios.
+                                    </div>
+                            </div>
+
+                                <div class="observacao-card">
+                                    <div class="observacao-header">
+                                        <span class="observacao-disciplina">📖 Português</span>
+                                        <span class="observacao-data">12/10/2024</span>
+                                    </div>
+                                    <div class="observacao-professor">Profa. Ana Costa</div>
+                                    <div class="observacao-texto">
+                                        Ótimo progresso na leitura e interpretação de textos. Sugiro aumentar o hábito de leitura em casa para continuar desenvolvendo as habilidades linguísticas.
+                                    </div>
+                            </div>
+
+                                <div class="observacao-card">
+                                    <div class="observacao-header">
+                                        <span class="observacao-disciplina">🔬 Ciências</span>
+                                        <span class="observacao-data">10/10/2024</span>
+                                    </div>
+                                    <div class="observacao-professor">Prof. Roberto Mendes</div>
+                                    <div class="observacao-texto">
+                                        Demonstra curiosidade e interesse pelos temas científicos. Participação ativa nos experimentos em laboratório. Continuar estimulando a curiosidade científica.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="status-section">
+                                <h2 class="status-title">📊 Status</h2>
+                                <div class="status-indicators">
+                                    <div class="status-indicator status-muito-bem">🌟 Está muito bem</div>
+                                    <div class="status-indicator status-bem">✅ Está bem</div>
+                                    <div class="status-indicator status-atencao">⚠️ Requer atenção</div>
+                                    <div class="status-indicator status-mal">❌ Está mal</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEÇÃO FREQUÊNCIA -->
+                    <div id="responsavelFrequenciaSection" style="display: none;">
+                        <h1 style="font-size: 24px; color: #333; margin-bottom: 30px;">Frequência Escolar</h1>
+
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                            <h3 style="color: #333; margin-bottom: 15px;">Resumo do Mês</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #4CAF50;">22</div>
+                                    <div style="color: #666;">Dias Presentes</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #FF9800;">2</div>
+                                    <div style="color: #666;">Faltas</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 32px; font-weight: bold; color: #2196F3;">88%</div>
+                                    <div style="color: #666;">Frequência</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: white; border: 1px solid #eee; border-radius: 15px; padding: 20px;">
+                            <h4 style="margin-bottom: 15px;">Últimas Ausências</h4>
+                            <div style="color: #666;">
+                                <p>• 15/08/2024 - Falta justificada (atestado médico)</p>
+                                <p>• 12/08/2024 - Falta não justificada</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEÇÃO PERFIL RESPONSÁVEL -->
+                    <div id="responsavelPerfilSection" style="display: none;">
+                        <div class="photo-section">
+                            <h2 style="font-size: 18px; margin-bottom: 20px;">PERFIL DO RESPONSÁVEL</h2>
+                            <div class="user-photo" onclick="changePhoto()">👤</div>
+                            <h1 class="user-name" id="responsavelPerfilNome">José Silva</h1>
+                            <div class="discipline-badge" id="responsavelPerfilCpf">CPF: ***.***.*89-00</div>
+                        </div>
+
+                        <!-- Informações do Aluno Vinculado -->
+                        <div style="background: linear-gradient(135deg, #e3f2fd, #f5f5f5); padding: 25px; border-radius: 15px; margin: 30px 0; border-left: 5px solid #2196F3;">
+                            <h3 style="color: #2196F3; font-size: 18px; margin-bottom: 15px; text-align: center;">👨‍👩‍👧 Aluno Vinculado</h3>
+                            <div style="background: #fff3cd; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: #856404; text-align: center;">
+                                🔒 <strong>Segurança:</strong> CPFs são exibidos parcialmente protegidos
+                            </div>
+                            <div style="display: grid; gap: 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 10px;">
+                                    <strong style="color: #C19A2B;">👤 Nome:</strong>
+                                    <span id="alunoVinculadoNome">João Silva</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 10px;">
+                                    <strong style="color: #C19A2B;">🎫 Matrícula:</strong>
+                                    <span id="alunoVinculadoMatricula">2024001</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 10px;">
+                                    <strong style="color: #C19A2B;">🔒 CPF:</strong>
+                                    <span id="alunoVinculadoCpf" style="font-family: monospace; letter-spacing: 1px;">***.***.*33-44</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 10px;">
+                                    <strong style="color: #C19A2B;">🎂 Data de Nascimento:</strong>
+                                    <span id="alunoVinculadoNascimento">15/03/2010</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 10px;">
+                                    <strong style="color: #C19A2B;">🏫 Turma:</strong>
+                                    <span id="alunoVinculadoTurma">2ª Série A</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; display: flex; gap: 15px; justify-content: center;">
+                            <button class="btn btn-edit" onclick="editResponsavelProfile()">
+                                <span style="font-size: 18px; margin-right: 8px;">✏️</span>
+                                Editar Perfil
+                            </button>
+                            <button class="btn btn-save" onclick="saveResponsavelProfile()">
+                                <span style="font-size: 18px; margin-right: 8px;">💾</span>
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Função de navegação para páginas separadas
+        function navigateToPage(page) {
+            window.location.href = page;
+        }
+
+        // Modificar função logout para redirecionar
+        function logout() {
+            localStorage.removeItem('currentUser');
+            showAlert('Logout realizado com sucesso!', 'success');
+            setTimeout(() => navigateToPage('login.html'), 1500);
+        }
+
+        // Variáveis globais
+        let currentAccessibilityMode = 'nenhum';
+        let fontSize = 100;
+
+        // Função para alternar acessibilidade
+        function toggleAccessibility(mode) {
+            const body = document.body;
+            const daltonismoLegend = document.getElementById('daltonismoLegend');
+            const pbLegend = document.getElementById('pbLegend');
+            
+            // Remover modos anteriores
+            body.classList.remove('daltonismo-mode', 'preto-e-branco-mode');
+            daltonismoLegend.classList.remove('show');
+            pbLegend.classList.remove('show');
+            
+            currentAccessibilityMode = mode;
+            
+            if (mode === 'daltonismo') {
+                body.classList.add('daltonismo-mode');
+                daltonismoLegend.classList.add('show');
+                showAlert('Modo Daltônico ativado! Legenda exibida.', 'success');
+            } else if (mode === 'preto-e-branco') {
+                body.classList.add('preto-e-branco-mode');
+                pbLegend.classList.add('show');
+                showAlert('Modo Preto e Branco ativado! Legenda exibida.', 'success');
+            } else {
+                showAlert('Modo de visualização padrão restaurado.', 'success');
+            }
+            
+            // Fechar menu de acessibilidade após seleção
+            document.getElementById('accessibilityOptions').classList.remove('show');
+        }
+        
+        // Função para alternar legenda de daltonismo
+        function toggleLegend() {
+            const legend = document.getElementById('daltonismoLegend');
+            legend.classList.toggle('show');
+        }
+        
+        // Função para alternar legenda P&B
+        function togglePbLegend() {
+            const legend = document.getElementById('pbLegend');
+            legend.classList.toggle('show');
+        }
+        
+        // Fechar legendas ao clicar fora
+        document.addEventListener('click', function(e) {
+            const daltonismoLegend = document.getElementById('daltonismoLegend');
+            const pbLegend = document.getElementById('pbLegend');
+            const legendToggle = document.querySelector('.legend-toggle');
+            const pbLegendToggle = document.querySelector('.pb-legend-toggle');
+            
+            if (daltonismoLegend && daltonismoLegend.classList.contains('show')) {
+                if (!daltonismoLegend.contains(e.target) && e.target !== legendToggle && !legendToggle.contains(e.target)) {
+                    daltonismoLegend.classList.remove('show');
+                }
+            }
+            
+            if (pbLegend && pbLegend.classList.contains('show')) {
+                if (!pbLegend.contains(e.target) && e.target !== pbLegendToggle && !pbLegendToggle.contains(e.target)) {
+                    pbLegend.classList.remove('show');
+                }
+            }
+        });
+        
+        // Fechar legendas com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const daltonismoLegend = document.getElementById('daltonismoLegend');
+                const pbLegend = document.getElementById('pbLegend');
+                if (daltonismoLegend) daltonismoLegend.classList.remove('show');
+                if (pbLegend) pbLegend.classList.remove('show');
+            }
+        });
+
+        // Verificar se o usuário está logado
+        document.addEventListener('DOMContentLoaded', function() {
+            const accessibilityToggle = document.querySelector('.accessibility-toggle');
+            const accessibilityOptions = document.getElementById('accessibilityOptions');
+            
+            if (accessibilityToggle) {
+                accessibilityToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    accessibilityOptions.classList.toggle('show');
+                });
+            }
+            
+            // Fechar menu ao clicar fora
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.accessibility-menu')) {
+                    accessibilityOptions.classList.remove('show');
+                }
+            });
+            
+            // Carregar dados do usuário do localStorage
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                navigateToPage('login.html');
+                return;
+            }
+
+            const currentUser = JSON.parse(userData);
+            if (currentUser.type !== 'responsavel') {
+                navigateToPage('login.html');
+                return;
+            }
+
+            // Atualizar informações do perfil do responsável
+            const nomeElement = document.getElementById('responsavelPerfilNome');
+            const cpfElement = document.getElementById('responsavelPerfilCpf');
+            if (nomeElement) nomeElement.textContent = currentUser.name;
+            if (cpfElement) {
+                const cpfMascarado = mascararCPF(currentUser.cpfResponsavel || currentUser.cpf);
+                cpfElement.textContent = `CPF: ${cpfMascarado}`;
+            }
+            
+            // Buscar aluno vinculado
+            let alunoVinculado = null;
+            if (currentUser.cpfAlunoVinculado) {
+                // Buscar nos usuários cadastrados
+                const todosUsuarios = Object.values(users);
+                alunoVinculado = todosUsuarios.find(u => u.type === 'aluno' && u.cpfAluno === currentUser.cpfAlunoVinculado);
+            }
+            
+            // Se tiver dados salvos do aluno vinculado, usar
+            if (currentUser.alunoVinculado) {
+                alunoVinculado = currentUser.alunoVinculado;
+            }
+            
+            // Atualizar informações do aluno vinculado na tela
+            if (alunoVinculado) {
+                // Header do boletim
+                const filhoNomeEl = document.getElementById('responsavelFilhoNome');
+                const filhoInfoEl = document.getElementById('responsavelFilhoInfo');
+                if (filhoNomeEl) filhoNomeEl.textContent = alunoVinculado.nome || alunoVinculado.name;
+                if (filhoInfoEl) filhoInfoEl.textContent = `Matrícula: ${alunoVinculado.matricula} • Turma: ${alunoVinculado.serie}ª${alunoVinculado.turma}`;
+                
+                // Seção de perfil - dados do aluno
+                const alunoNomeEl = document.getElementById('alunoVinculadoNome');
+                const alunoMatriculaEl = document.getElementById('alunoVinculadoMatricula');
+                const alunoCpfEl = document.getElementById('alunoVinculadoCpf');
+                const alunoNascimentoEl = document.getElementById('alunoVinculadoNascimento');
+                const alunoTurmaEl = document.getElementById('alunoVinculadoTurma');
+                
+                if (alunoNomeEl) alunoNomeEl.textContent = alunoVinculado.nome || alunoVinculado.name;
+                if (alunoMatriculaEl) alunoMatriculaEl.textContent = alunoVinculado.matricula;
+                if (alunoCpfEl) {
+                    const cpfAlunoMascarado = mascararCPF(alunoVinculado.cpf || alunoVinculado.cpfAluno);
+                    alunoCpfEl.textContent = cpfAlunoMascarado;
+                }
+                if (alunoNascimentoEl) {
+                    const dataNasc = alunoVinculado.dataNascimento;
+                    if (dataNasc) {
+                        const dataFormatada = new Date(dataNasc + 'T00:00:00').toLocaleDateString('pt-BR');
+                        alunoNascimentoEl.textContent = dataFormatada;
+                    }
+                }
+                if (alunoTurmaEl) alunoTurmaEl.textContent = `${alunoVinculado.serie}ª Série ${alunoVinculado.turma}`;
+            } else {
+                showAlert('Atenção: Nenhum aluno vinculado encontrado!', 'error');
+            }
+            
+            // Funcionalidade dos botões da toolbar
+            const toolbar = document.querySelector('.bd-toolbar');
+            if (toolbar) {
+                toolbar.addEventListener('click', function(e) {
+                    const btn = e.target.closest('.bd-btn');
+                    if (!btn) return;
+                    
+                    const action = btn.dataset.action;
+                    
+                    switch(action) {
+                        case 'font-dec':
+                            adjustFontSize(-1);
+                            break;
+                        case 'font-inc':
+                            adjustFontSize(1);
+                            break;
+                        case 'contrast':
+                            toggleHighContrast();
+                            break;
+                        case 'dyslexia':
+                            toggleDyslexiaFont();
+                            break;
+                        case 'reduce-motion':
+                            toggleReducedMotion();
+                            break;
+                        case 'print':
+                            exportBoletimFilhoPDF();
+                            break;
+                    }
+                });
+            }
+        });
+        
+        // Funções auxiliares da toolbar (sem redeclaração)
+        function adjustFontSize(delta) {
+            if (typeof fontSize === 'undefined') {
+                window.fontSize = 100;
+            }
+            fontSize = Math.max(80, Math.min(120, fontSize + delta * 10));
+            document.documentElement.style.fontSize = fontSize + '%';
+            showAlert(`Tamanho da fonte: ${fontSize}%`, 'success');
+        }
+        
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            const isActive = document.body.classList.contains('high-contrast');
+            showAlert(isActive ? 'Alto contraste ativado' : 'Alto contraste desativado', 'success');
+        }
+        
+        function toggleDyslexiaFont() {
+            document.body.classList.toggle('dyslexia-font');
+            const isActive = document.body.classList.contains('dyslexia-font');
+            showAlert(isActive ? 'Fonte para dislexia ativada' : 'Fonte padrão restaurada', 'success');
+        }
+        
+        function toggleReducedMotion() {
+            document.body.classList.toggle('reduced-motion');
+            const isActive = document.body.classList.contains('reduced-motion');
+            showAlert(isActive ? 'Animações reduzidas' : 'Animações restauradas', 'success');
+        }
+        
+        function exportBoletimFilhoPDF() {
+            const userData = localStorage.getItem('currentUser');
+            if (!userData) {
+                showAlert('Erro: Usuário não encontrado!', 'error');
+                return;
+            }
+
+            const currentUser = JSON.parse(userData);
+            showAlert('Gerando PDF do boletim...', 'success');
+            
+            // Dados do boletim do filho
+            const disciplinas = [
+                { nome: 'Frequência', bim1: '88%', bim2: '95%', bim3: '90%', bim4: '92%' },
+                { nome: 'Português', bim1: '8.2', bim2: '9.0', bim3: '8.5', bim4: '9.2' },
+                { nome: 'Matemática', bim1: '9.1', bim2: '9.5', bim3: '8.8', bim4: '9.3' },
+                { nome: 'Ciências', bim1: '8.0', bim2: '8.5', bim3: '9.0', bim4: '8.7' },
+                { nome: 'História', bim1: '7.8', bim2: '8.2', bim3: '8.0', bim4: '8.3' },
+                { nome: 'Comportamento', bim1: 'Excelente', bim2: 'Excelente', bim3: 'Bom', bim4: 'Excelente' }
+            ];
+            
+            const observacoes = [
+                {
+                    disciplina: '📚 Matemática',
+                    professor: 'Prof. Carlos Silva',
+                    data: '15/10/2024',
+                    texto: 'Aluna demonstra excelente desempenho em todas as atividades. Participa ativamente das aulas e auxilia os colegas. Recomendo continuar incentivando a prática diária de exercícios.'
+                },
+                {
+                    disciplina: '📖 Português',
+                    professor: 'Profa. Ana Costa',
+                    data: '12/10/2024',
+                    texto: 'Ótimo progresso na leitura e interpretação de textos. Sugiro aumentar o hábito de leitura em casa para continuar desenvolvendo as habilidades linguísticas.'
+                },
+                {
+                    disciplina: '🔬 Ciências',
+                    professor: 'Prof. Roberto Mendes',
+                    data: '10/10/2024',
+                    texto: 'Demonstra curiosidade e interesse pelos temas científicos. Participação ativa nos experimentos em laboratório. Continuar estimulando a curiosidade científica.'
+                }
+            ];
+            
+            // Criar conteúdo HTML para o PDF
+            let htmlContent = `
+                <html>
+                <head>
+                    <style>
+                        body { 
+                            font-family: 'Segoe UI', Arial, sans-serif; 
+                            padding: 40px; 
+                            background: #f8f9fa; 
+                        }
+                        .container { 
+                            background: white; 
+                            padding: 40px; 
+                            border-radius: 15px; 
+                            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+                        }
+                        h1 { 
+                            color: #D4AF37; 
+                            text-align: center; 
+                            margin-bottom: 10px; 
+                            font-size: 32px;
+                            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+                        }
+                        .subtitle { 
+                            color: #C19A2B; 
+                            text-align: center;
+                            margin-bottom: 30px; 
+                            font-size: 16px; 
+                        }
+                        .info-section { 
+                            background: linear-gradient(135deg, #f5f3e8, #ede8d5); 
+                            padding: 20px; 
+                            border-radius: 12px; 
+                            margin-bottom: 25px;
+                            border-left: 5px solid #D4AF37;
+                        }
+                        .info-section p { 
+                            margin: 8px 0; 
+                            color: #555; 
+                        }
+                        table { 
+                            width: 100%; 
+                            border-collapse: separate; 
+                            border-spacing: 0; 
+                            margin-top: 25px;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+                        }
+                        th { 
+                            background: linear-gradient(135deg, #D4AF37, #C19A2B); 
+                            color: white; 
+                            padding: 15px 12px; 
+                            text-align: center;
+                            font-weight: 600;
+                            font-size: 13px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                        }
+                        th:first-child {
+                            text-align: left;
+                        }
+                        td { 
+                            border-bottom: 1px solid #e0e0e0; 
+                            padding: 14px 12px;
+                            background: white;
+                            color: #333;
+                            text-align: center;
+                        }
+                        td:first-child {
+                            text-align: left;
+                            font-weight: 600;
+                            color: #C19A2B;
+                        }
+                        tr:nth-child(even) td { 
+                            background: #fafafa; 
+                        }
+                        tr:last-child td { 
+                            border-bottom: none; 
+                        }
+                        
+                        .observacoes-section {
+                            margin-top: 40px;
+                        }
+                        
+                        .observacoes-title {
+                            color: #D4AF37;
+                            font-size: 22px;
+                            margin-bottom: 20px;
+                            border-bottom: 3px solid #D4AF37;
+                            padding-bottom: 10px;
+                        }
+                        
+                        .observacao-box {
+                            background: linear-gradient(135deg, #f5f3e8, #ede8d5);
+                            padding: 20px;
+                            border-radius: 12px;
+                            margin-bottom: 20px;
+                            border-left: 5px solid #2196F3;
+                            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+                        }
+                        
+                        .obs-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 12px;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                        }
+                        
+                        .obs-disciplina {
+                            font-weight: bold;
+                            color: #2196F3;
+                            font-size: 16px;
+                        }
+                        
+                        .obs-data {
+                            color: #888;
+                            font-size: 13px;
+                        }
+                        
+                        .obs-professor {
+                            color: #C19A2B;
+                            font-weight: 600;
+                            margin-bottom: 10px;
+                            font-size: 14px;
+                        }
+                        
+                        .obs-texto {
+                            color: #555;
+                            line-height: 1.6;
+                            font-size: 14px;
+                        }
+                        
+                        .footer { 
+                            margin-top: 40px; 
+                            text-align: center; 
+                            font-size: 12px; 
+                            color: #888;
+                            padding-top: 30px;
+                            border-top: 2px solid #D4AF37;
+                        }
+                        .footer p { 
+                            margin: 5px 0; 
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>📋 Boletim Escolar</h1>
+                        <div class="subtitle">Sistema Escolar JK - Visualização Responsável</div>
+                        
+                        <div class="info-section">
+                            <p><strong>👤 Estudante:</strong> ${currentUser.alunoVinculado?.nome || 'Não informado'}</p>
+                            <p><strong>🎫 Matrícula:</strong> ${currentUser.alunoVinculado?.matricula || 'Não informado'}</p>
+                            <p><strong>🔒 CPF (Protegido):</strong> ${mascararCPF(currentUser.alunoVinculado?.cpf)}</p>
+                            <p><strong>🏫 Turma:</strong> ${currentUser.alunoVinculado?.serie}ª Série ${currentUser.alunoVinculado?.turma}</p>
+                            <p><strong>👨‍👩‍👧 Responsável:</strong> ${currentUser.name}</p>
+                            <p><strong>📅 Data de Emissão:</strong> ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>1º Bimestre</th>
+                                    <th>2º Bimestre</th>
+                                    <th>3º Bimestre</th>
+                                    <th>4º Bimestre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${disciplinas.map(disc => `
+                                    <tr>
+                                        <td>${disc.nome}</td>
+                                        <td>${disc.bim1}</td>
+                                        <td>${disc.bim2}</td>
+                                        <td>${disc.bim3}</td>
+                                        <td>${disc.bim4}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        
+                        <div class="observacoes-section">
+                            <h3 class="observacoes-title">📝 Observações dos Professores</h3>
+                            ${observacoes.map(obs => `
+                                <div class="observacao-box">
+                                    <div class="obs-header">
+                                        <span class="obs-disciplina">${obs.disciplina}</span>
+                                        <span class="obs-data">${obs.data}</span>
+                                    </div>
+                                    <div class="obs-professor">${obs.professor}</div>
+                                    <div class="obs-texto">${obs.texto}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="footer">
+                            <p><strong>Sistema Escolar JK - Gestão Acadêmica</strong></p>
+                            <p>Boletim gerado para o responsável</p>
+                            <p>${new Date().toLocaleString('pt-BR')}</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Criar e fazer download do PDF
+            const printWindow = window.open('', '', 'height=800,width=1000');
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            
+            setTimeout(() => {
+                printWindow.print();
+                showAlert('PDF gerado! Use a opção "Salvar como PDF" na janela de impressão.', 'success');
+            }, 500);
+        }
+        
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            const isActive = document.body.classList.contains('high-contrast');
+            showAlert(isActive ? 'Alto contraste ativado' : 'Alto contraste desativado', 'success');
+        }
+        
+        function toggleDyslexiaFont() {
+            document.body.classList.toggle('dyslexia-font');
+            const isActive = document.body.classList.contains('dyslexia-font');
+            showAlert(isActive ? 'Fonte para dislexia ativada' : 'Fonte padrão restaurada', 'success');
+        }
+        
+        function toggleReducedMotion() {
+            document.body.classList.toggle('reduced-motion');
+            const isActive = document.body.classList.contains('reduced-motion');
+            showAlert(isActive ? 'Animações reduzidas' : 'Animações restauradas', 'success');
+        }
+    </script>
+</body>
+</html>

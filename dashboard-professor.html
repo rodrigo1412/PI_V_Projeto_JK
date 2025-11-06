@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Professor - Sistema Escolar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Menu de Acessibilidade -->
+    <div class="accessibility-menu">
+        <button class="accessibility-toggle">
+            ♿ Acessibilidade
+        </button>
+        <div class="accessibility-options" id="accessibilityOptions">
+            <a href="#" onclick="toggleAccessibility('daltonismo')">Modo Daltônico</a>
+            <a href="#" onclick="toggleAccessibility('preto-e-branco')">Preto e Branco</a>
+            <a href="#" onclick="toggleAccessibility('nenhum')">Restaurar Padrão</a>
+        </div>
+    </div>
+
+    <!-- Legendas de Acessibilidade -->
+    <button class="legend-toggle" onclick="toggleLegend()">Ver Legenda (Daltonismo)</button>
+    <div class="daltonismo-legend" id="daltonismoLegend">
+        <button class="legend-close-btn" onclick="toggleLegend()" aria-label="Fechar legenda">×</button>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #0066cc;">★</div>
+            <span class="legend-text">Excelente</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666666;">●</div>
+            <span class="legend-text">Bom</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #cc6600;">▲</div>
+            <span class="legend-text">Regular / Atenção</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #000000;">✖</div>
+            <span class="legend-text">Insatisfatório</span>
+        </div>
+    </div>
+
+    <button class="pb-legend-toggle" onclick="togglePbLegend()">Ver Legenda (P&B)</button>
+    <div class="pb-legend" id="pbLegend">
+        <button class="legend-close-btn" onclick="togglePbLegend()" aria-label="Fechar legenda">×</button>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">■</div>
+            <span class="legend-text">Excelente</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">●</div>
+            <span class="legend-text">Bom</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">▲</div>
+            <span class="legend-text">Regular / Atenção</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-symbol" style="background: #666;">✖</div>
+            <span class="legend-text">Insatisfatório</span>
+        </div>
+    </div>
+
+    <!-- Elementos Decorativos -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- DASHBOARD PROFESSOR -->
+        <div class="page active" id="dashboardProfessorPage">
+            <div class="main-layout">
+                <nav class="sidebar">
+                    <div class="menu-item active" onclick="showProfessorSection('boletim')">
+                        <div class="menu-icon">📋</div>
+                        <span>Boletim</span>
+                    </div>
+
+                    <div class="menu-item" onclick="showProfessorSection('turmas')">
+                        <div class="menu-icon">👥</div>
+                        <span>Turmas</span>
+                    </div>
+
+                    <div class="menu-item" onclick="showProfessorSection('disciplinas')">
+                        <div class="menu-icon">📚</div>
+                        <span>Disciplinas</span>
+                    </div>
+
+                    <div class="menu-item" onclick="showProfessorSection('perfil')">
+                        <div class="menu-icon">👤</div>
+                        <span>Perfil</span>
+                    </div>
+
+                    <div class="menu-item" onclick="logout()">
+                        <div class="menu-icon">🚪</div>
+                        <span>Sair</span>
+                    </div>
+                </nav>
+
+                <main class="main-content">
+                    <!-- SEÇÃO BOLETIM -->
+                    <div id="professorBoletimSection">
+                        <div class="professor-dashboard-container">
+                            <div class="professor-header">
+                                <h1 class="professor-title">Painel do Professor</h1>
+                                <div class="logo" style="margin: 0;"></div>
+                            </div>
+
+                            <!-- Ferramentas Rápidas -->
+                            <div class="professor-tools-grid">
+                            <button class="tool-card" onclick="adicionarSimulado()">
+                                <div class="tool-icon">📝</div>
+                                <div class="tool-title">Adicionar Simulado</div>
+                                <div class="tool-desc">Criar nova avaliação</div>
+                            </button>
+                            <button class="tool-card" onclick="calcularMedias()">
+                                <div class="tool-icon">🧮</div>
+                                <div class="tool-title">Calcular Médias</div>
+                                <div class="tool-desc">Médias automáticas</div>
+                            </button>
+                            <button class="tool-card" onclick="lancarFaltas()">
+                                <div class="tool-icon">📅</div>
+                                <div class="tool-title">Lançar Faltas</div>
+                                <div class="tool-desc">Registrar ausências</div>
+                            </button>
+                            <button class="tool-card" onclick="gerarRelatorios()">
+                                <div class="tool-icon">📊</div>
+                                <div class="tool-title">Relatórios</div>
+                                <div class="tool-desc">Gerar análises</div>
+                            </button>
+                        </div>
+
+                        <!-- Botão Toggle para Gerenciar Notas -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <button class="btn-toggle-grades" onclick="toggleGerenciarNotas()" id="btnToggleGrades">
+                                👁️ Mostrar Gerenciamento de Notas
+                            </button>
+                        </div>
+
+                        <!-- Seção de Gerenciamento de Notas (oculta por padrão) -->
+                        <div id="gerenciarNotasSection" style="display: none;">
+                        <h3 style="text-align: center; color: #D4AF37; font-size: 22px; margin-bottom: 20px; font-weight: 700;">📋 Gerenciar Notas da Turma</h3>
+                        
+                        <!-- Seletor de Simulado para Editar -->
+                        <div style="text-align: center; margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #2c3e50; font-size: 16px;">
+                                📝 Selecione o simulado para editar:
+                            </label>
+                            <div style="display: inline-flex; gap: 10px; padding: 8px; background: linear-gradient(135deg, #fff9f0, #ffffff); border-radius: 15px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15); border: 2px solid rgba(212, 175, 55, 0.2);">
+                                <button class="simulado-btn active" onclick="trocarSimuladoProfessor(1)" data-simulado="1">
+                                    <span class="simulado-icon">📝</span>
+                                    <span class="simulado-label">Simulado 1</span>
+                                </button>
+                                <button class="simulado-btn" onclick="trocarSimuladoProfessor(2)" data-simulado="2">
+                                    <span class="simulado-icon">📝</span>
+                                    <span class="simulado-label">Simulado 2</span>
+                                </button>
+                                <button class="simulado-btn" onclick="trocarSimuladoProfessor(3)" data-simulado="3">
+                                    <span class="simulado-icon">📝</span>
+                                    <span class="simulado-label">Simulado 3</span>
+                                </button>
+                                <button class="simulado-btn" onclick="trocarSimuladoProfessor(4)" data-simulado="4">
+                                    <span class="simulado-icon">📝</span>
+                                    <span class="simulado-label">Simulado 4</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <table class="grades-table" id="gradesTableProfessor">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>João Silva</th>
+                                    <th>Maria Santos</th>
+                                    <th>Pedro Oliveira</th>
+                                    <th>Ana Costa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="subject-cell">Frequência</td>
+                                    <td class="content-cell" onclick="editNote(this, 'João', 'Frequência')">95%</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Maria', 'Frequência')">88%</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Pedro', 'Frequência')">92%</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Ana', 'Frequência')">85%</td>
+                                </tr>
+                                <tr>
+                                    <td class="subject-cell">Notas</td>
+                                    <td class="content-cell" onclick="editNote(this, 'João', 'Notas')">9.5</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Maria', 'Notas')">8.2</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Pedro', 'Notas')">7.8</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Ana', 'Notas')">9.0</td>
+                                </tr>
+                                <tr>
+                                    <td class="subject-cell">Comportamento</td>
+                                    <td class="content-cell" onclick="editNote(this, 'João', 'Comportamento')">Excelente</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Maria', 'Comportamento')">Bom</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Pedro', 'Comportamento')">Bom</td>
+                                    <td class="content-cell" onclick="editNote(this, 'Ana', 'Comportamento')">Excelente</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="text-align: center; display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                            <button class="btn btn-save" onclick="salvarAlteracoesNotas()">💾 Salvar Alterações</button>
+                            <button class="btn btn-edit" onclick="exportGrades()">🖨️ Exportar PDF</button>
+                            <button class="btn" onclick="verEstatisticas()">📈 Ver Estatísticas</button>
+                            </div>
+                            </div> <!-- Fecha gerenciarNotasSection -->
+                        </div> <!-- Fecha professor-dashboard-container -->
+                    </div>
+
+                    <!-- SEÇÃO TURMAS -->
+                    <div id="professorTurmasSection" style="display: none;">
+                        <div class="professor-dashboard-container">
+                            <div class="professor-header">
+                                <h1 class="professor-title">Minhas Turmas</h1>
+                            </div>
+
+                        <div class="turma-item">
+                            <div class="turma-info">
+                                <div class="turma-icon">👥</div>
+                                <div class="turma-details">
+                                    <h3>Turma: 1° ano A</h3>
+                                    <p>Matemática - 5 alunos</p>
+                                </div>
+                            </div>
+                            <button class="btn-gerenciar" onclick="gerenciarTurma('1A')">Gerenciar</button>
+                        </div>
+
+                        <div class="turma-item">
+                            <div class="turma-info">
+                                <div class="turma-icon">👥</div>
+                                <div class="turma-details">
+                                    <h3>Turma: 2° ano B</h3>
+                                    <p>Matemática - 4 alunos</p>
+                                </div>
+                            </div>
+                            <button class="btn-gerenciar" onclick="gerenciarTurma('2B')">Gerenciar</button>
+                        </div>
+
+                        <div class="turma-item">
+                            <div class="turma-info">
+                                <div class="turma-icon">👥</div>
+                                <div class="turma-details">
+                                    <h3>Turma: 3° ano A</h3>
+                                    <p>Matemática - 5 alunos</p>
+                                </div>
+                            </div>
+                            <button class="btn-gerenciar" onclick="gerenciarTurma('3A')">Gerenciar</button>
+                        </div>
+                        </div> <!-- Fecha professor-dashboard-container -->
+                    </div>
+
+                    <!-- SEÇÃO DISCIPLINAS -->
+                    <div id="professorDisciplinasSection" style="display: none;">
+                        <div class="professor-dashboard-container">
+                            <div class="professor-header">
+                                <h1 class="professor-title">Minhas Disciplinas</h1>
+                                <button class="btn btn-save" onclick="adicionarNovaDisciplina()">➕ Nova Disciplina</button>
+                            </div>
+
+                        <div style="display: grid; gap: 20px;">
+                            <div class="disciplina-card" style="background: linear-gradient(135deg, #fff9e6, #ffffff); padding: 25px; border-radius: 15px; border-left: 5px solid #D4AF37; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                                <h3 style="color: #2c3e50; margin-bottom: 10px; font-size: 20px; font-weight: 700;">📐 Matemática</h3>
+                                <p style="color: #555; margin-bottom: 15px; font-size: 15px; font-weight: 500;">3 turmas ativas • 14 alunos total</p>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button class="btn btn-edit" onclick="gerenciarDisciplina('Matemática')">📊 Gerenciar</button>
+                                    <button class="btn btn-save" onclick="gerenciarConteudo('Matemática')">📖 Conteúdo</button>
+                                    <button class="btn" onclick="verEstatisticasDisciplina('Matemática')">📈 Estatísticas</button>
+                                </div>
+                            </div>
+
+                            <div class="disciplina-card" style="background: linear-gradient(135deg, #e3f2fd, #ffffff); padding: 25px; border-radius: 15px; border-left: 5px solid #2196F3; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                                <h3 style="color: #2c3e50; margin-bottom: 10px; font-size: 20px; font-weight: 700;">⚡ Física (Apoio)</h3>
+                                <p style="color: #555; margin-bottom: 15px; font-size: 15px; font-weight: 500;">1 turma ativa • 4 alunos total</p>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button class="btn btn-edit" onclick="gerenciarDisciplina('Física (Apoio)')">📊 Gerenciar</button>
+                                    <button class="btn btn-save" onclick="gerenciarConteudo('Física (Apoio)')">📖 Conteúdo</button>
+                                    <button class="btn" onclick="verEstatisticasDisciplina('Física (Apoio)')">📈 Estatísticas</button>
+                                </div>
+                            </div>
+                        </div>
+                        </div> <!-- Fecha professor-dashboard-container -->
+                    </div>
+
+                    <!-- SEÇÃO PERFIL PROFESSOR -->
+                    <div id="professorPerfilSection" style="display: none;">
+                        <div class="professor-dashboard-container">
+                            <div class="professor-header">
+                                <h1 class="professor-title">Perfil do Professor</h1>
+                            </div>
+                            
+                            <div class="photo-section">
+                            <div class="user-photo" onclick="changePhoto()">👤</div>
+                            <h1 class="user-name" id="professorPerfilNome">Prof. Carlos Silva</h1>
+                            <div class="discipline-badge" id="professorPerfilDisciplina">Disciplina: Matemática</div>
+                        </div>
+
+                        <!-- Links de Segurança e Políticas -->
+                        <div style="background: linear-gradient(135deg, #e3f2fd, #f5f5f5); padding: 20px; border-radius: 15px; margin: 25px 0; border-left: 5px solid #2196F3;">
+                            <h3 style="color: #1976D2; font-size: 16px; margin-bottom: 15px; text-align: center;">🔒 Segurança e Privacidade</h3>
+                            <div style="display: grid; gap: 10px;">
+                                <button class="info-link" onclick="mostrarPoliticaProtecaoDados()">
+                                    🛡️ Política de Proteção de Dados (LGPD)
+                                </button>
+                                <button class="info-link" onclick="showAlert('Última alteração: Hoje, às ${new Date().toLocaleTimeString()}', 'success')">
+                                    📋 Histórico de Alterações
+                                </button>
+                                <button class="info-link" onclick="showAlert('Seu acesso é monitorado para segurança do sistema', 'success')">
+                                    🔐 Log de Acessos
+                                </button>
+                            </div>
+                        </div>
+
+                            <div style="text-align: center;">
+                                <button class="btn btn-edit" onclick="editProfessorProfile()">✏️ Editar Perfil</button>
+                                <button class="btn btn-save" onclick="saveProfessorProfile()">💾 Salvar e Sair</button>
+                            </div>
+                        </div> <!-- Fecha professor-dashboard-container -->
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Função de navegação para páginas separadas
+        function navigateToPage(page) {
+            window.location.href = page;
+        }
+
+        // Modificar função logout para redirecionar
+        function logout() {
+            localStorage.removeItem('currentUser');
+            showAlert('Logout realizado com sucesso!', 'success');
+            setTimeout(() => navigateToPage('login.html'), 1500);
+        }
+
+        // Verificar se o usuário está logado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar dados do usuário do localStorage
+            const userData = localStorage.getItem('currentUser');
+            const userEmail = localStorage.getItem('currentUserEmail');
+            
+            if (!userData || !userEmail) {
+                navigateToPage('login.html');
+                return;
+            }
+
+            // Definir currentUser no escopo global (window) para acesso de todas as funções
+            window.currentUser = JSON.parse(userData);
+            
+            // Garantir que o email esteja no objeto currentUser
+            if (!window.currentUser.email) {
+                window.currentUser.email = userEmail;
+            }
+            
+            if (window.currentUser.type !== 'professor') {
+                navigateToPage('login.html');
+                return;
+            }
+
+            // Atualizar informações do perfil
+            const nomeElement = document.getElementById('professorPerfilNome');
+            const disciplinaElement = document.getElementById('professorPerfilDisciplina');
+            if (nomeElement) nomeElement.textContent = window.currentUser.name;
+            if (disciplinaElement) disciplinaElement.textContent = `Disciplina: ${window.currentUser.disciplina}`;
+            
+            // Debug: Verificar se currentUser foi carregado corretamente
+            console.log('✅ Usuário carregado:', window.currentUser);
+        });
+    </script>
+</body>
+</html>
